@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<ReservationApp.Models.Student>
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Index";
+}
+
+<h3 class="text-center">User Role Management</h3>
+<hr />
+
+<div class="container">
+
+    @await Html.PartialAsync("_TopMenuPartial")
+
+    <div class="row">
+        <div class="col-12">
+            @if (ViewBag.Users.Count == 0)
+            {
+                <p>No users</p>
+            }
+            else
+            {
+                <table class="table">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th>UserName</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var u in ViewBag.Users)
+                        {
+                            <tr>
+                                <td>@u.UserName</td>
+                                <td>
+                                    <a class="btn btn-success" asp-area="Admin" asp-controller="Roles" asp-action="Details" asp-route-userId="@u.Id"  >View Details</a>
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+

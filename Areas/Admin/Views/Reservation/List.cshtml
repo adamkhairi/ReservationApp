@@ -1,0 +1,59 @@
+﻿@*@model List<ReservationApp.ViewModels.ReservationStudentViewModel>*@
+@model List<Reservation>
+@{
+    ViewData["Title"] = "Index";
+}
+
+@await Html.PartialAsync("_TopMenuPartial")
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Date
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Cause
+            </th>
+            <th>
+                Student
+            </th>
+            <th>
+                Reservation Type
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cause)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReservationType.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
