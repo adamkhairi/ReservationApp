@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReservationApp.Data;
@@ -224,7 +225,8 @@ namespace ReservationApp.Migrations
             modelBuilder.Entity("ReservationApp.Models.Reservation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Cause")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -251,10 +253,11 @@ namespace ReservationApp.Migrations
                 });
 
             modelBuilder.Entity("ReservationApp.Models.ReservationType", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("varchar(255) CHARACTER SET utf8mb4")
+                    .ValueGeneratedOnAdd();
+                        
                     b.Property<int>("AccessNumber")
                         .HasColumnType("int");
 

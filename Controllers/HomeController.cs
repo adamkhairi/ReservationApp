@@ -29,20 +29,20 @@ namespace ReservationApp.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            //var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-            //var userRes = _context.Reservations.Include(r => r.ReservationType == _context.ReservationTypes.Include(
-            //    rT => rT.Id == r.Id
+          public IActionResult Index()
+          {
+               //var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+               //var userRes = _context.Reservations.Include(r => r.ReservationType == _context.ReservationTypes.Include(
+               //    rT => rT.Id == r.Id
 
-            //)).AsAsyncEnumerable();
+               //)).AsAsyncEnumerable();
 
-            //var x =  await _userManager.GetUsersInRoleAsync("Student");
-            //ViewBag.Students = x;
-            return View();
-        }
+               //var x =  await _userManager.GetUsersInRoleAsync("Student");
+               //ViewBag.Students = x;
+               return View();
+          }
 
-        public IActionResult Privacy()
+          public IActionResult Privacy()
         {
             return View();
         }
