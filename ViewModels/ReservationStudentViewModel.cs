@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using ReservationApp.Models;
 
 namespace ReservationApp.ViewModels
@@ -18,6 +19,7 @@ namespace ReservationApp.ViewModels
           public string Id { get; set; }
           [DisplayName("Student")]
           public string StudentId { get; set; }
+          public IdentityUser Student { get; set; }
           //public string LastName { get; set; }
           // //TODO:Fix This
           [DisplayName("Reservation Date")]
