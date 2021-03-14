@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model ReservationApp.ViewModels.ReservationStudentViewModel
+@*@model Reservation*@
 @inject UserManager<IdentityUser> _userManager
 
 
@@ -15,7 +16,7 @@
     <div class="col-md-4">
 
       
-        <form asp-action="Create">
+        <form asp-action="Create" asp-controller="Reservation">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
@@ -32,7 +33,7 @@
                 <input asp-for="Cause" class="form-control" />
                 <span asp-validation-for="Cause" class="text-danger"></span>
             </div>
-            <div class="form-group">
+           <div class="form-group">
                 <label asp-for="ReservationTypeId" class="control-label">Type</label>
                 <select asp-for="ReservationTypeId" asp-items="@ViewBag.ResType" class="form-control custom-select">
                     <option disabled selected>- Reservation Type -</option>

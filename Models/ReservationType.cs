@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace ReservationApp.Models
           [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
           [Key, Column(Order = 0)]
           public string Id { get; set; }
+          [DisplayName("Reservation Type")]
           public string Name { get; set; }
           public int AccessNumber { get; set; }
      }

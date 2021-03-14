@@ -21,13 +21,13 @@ namespace ReservationApp.Models
           [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
           public DateTime Date { get; set; }
           public string Status { get; set; }
-          public bool IsApproved { get; set; }
 
           [AllowNull]
           public string Cause { get; set; }
           public IdentityUser Student { get; set; }
 
-        //public Student Student { get; set; }
+          public string StudentId { get; set; }
+          //public Student Student { get; set; }
           //   public string TypeId { get; set; }
 
           [DisplayName("Type")]
@@ -42,7 +42,7 @@ namespace ReservationApp.Models
                var dateNow = DateTime.UtcNow;
                //CreateDate = TimeZoneInfo.ConvertTimeFromUtc(dateNow,TimeZoneInfo.Local);
                this.CreateDate = dateNow.ToLocalTime().Date;
-               this.IsApproved = false;
+               this.Status = Models.Status.Pending.ToString();
           }
      }
 }
