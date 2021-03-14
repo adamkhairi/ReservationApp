@@ -50,6 +50,14 @@ namespace ReservationApp.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            [StringLength(200,ErrorMessage = "Please enter your full name")]
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
+
+            
+            public string Class { get; set; }
+
+
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]

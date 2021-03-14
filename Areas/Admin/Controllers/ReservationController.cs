@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +14,7 @@ using ReservationApp.ViewModels;
 namespace ReservationApp.Areas.Admin.Controllers
 {
      [Area("Admin")]
+     [Authorize(Roles = "Admin")]
      public class ReservationController : Controller
      {
           private readonly ApplicationDbContext _context;
@@ -25,27 +27,27 @@ namespace ReservationApp.Areas.Admin.Controllers
           // GET: Admin/Reservation
           public async Task<IActionResult> Index()
           {
-            //var applicationDbContext = _context.Reservations.Include(r => r.Student);
-            //var Lisst = (
+               //var applicationDbContext = _context.Reservations.Include(r => r.Student);
+               //var Lisst = (
 
-            //        from r in _context.Reservations
-            //        join s in _context.Students
-            //            on r.Student.Id equals s.Id
-            //        join rt in _context.ReservationTypes
-            //            on r.ReservationType.Id equals rt.Id
-            //        select new ReservationStudentViewModel()
-            //        {
-            //            Id = s.Id,
-            //            UserName = s.UserName,
-            //            Email = s.Email,
-            //            Date = r.Date,
-            //            Cause = r.Cause,
-            //            Status = r.Status,
-            //            ReservationType = rt.Name,
-            //        }
-            //);
+               //        from r in _context.Reservations
+               //        join s in _context.Students
+               //            on r.Student.Id equals s.Id
+               //        join rt in _context.ReservationTypes
+               //            on r.ReservationType.Id equals rt.Id
+               //        select new ReservationStudentViewModel()
+               //        {
+               //            Id = s.Id,
+               //            UserName = s.UserName,
+               //            Email = s.Email,
+               //            Date = r.Date,
+               //            Cause = r.Cause,
+               //            Status = r.Status,
+               //            ReservationType = rt.Name,
+               //        }
+               //);
 
-            //var xx = _context.ReservationTypes;
+               //var xx = _context.ReservationTypes;
                var List = await _context.Reservations
                    .Include(x => x.ReservationType)
                    .Include(s => s.Student)

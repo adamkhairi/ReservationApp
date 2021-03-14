@@ -1,24 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace ReservationApp.Models
 {
-    public class Reservation
-    {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key, Column(Order = 0)]
-        public string Id { get; set; }
-        public DateTime Date { get; set; }
-        public string Status { get; set; }
-        public string? Cause { get; set; }
-        public Student Student { get; set; }
-        //   public string TypeId { get; set; }
-        public ReservationType ReservationType { get; set; }
-        public DateTime CreateDate { get; set; }
-    }
+     public class Reservation
+     {
+          [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+          [Key, Column(Order = 0)]
+          public string Id { get; set; }
+
+          [DisplayName("Reservation Date")]
+          [DataType(DataType.Date)]
+          [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+          public DateTime Date { get; set; }
+          public string Status { get; set; }
+          public bool IsApproved { get; set; }
+
+          [AllowNull]
+          public string Cause { get; set; }
+          public IdentityUser Student { get; set; }
+
+        //public Student Student { get; set; }
+          //   public string TypeId { get; set; }
+
+          [DisplayName("Type")]
+          public ReservationType ReservationType { get; set; }
+
+          [DisplayName("Creation Date")]
+          [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+          public DateTime CreateDate { get; set; }
+
+          public Reservation()
+          {
+               var dateNow = DateTime.UtcNow;
+               //CreateDate = TimeZoneInfo.ConvertTimeFromUtc(dateNow,TimeZoneInfo.Local);
+               this.CreateDate = dateNow.ToLocalTime().Date;
+               this.IsApproved = false;
+          }
+     }
 }
 

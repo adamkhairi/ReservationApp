@@ -1,18 +1,25 @@
-﻿<h3 class="text-center">Controls</h3>
+﻿
+<h3 class="text-center">Controls</h3>
 <hr />
 <div class="mx-auto d-flex justify-content-center align-items-center flex-column" style="margin-bottom:10px;">
 
     <div class="m-1 d-flex justify-content-around">
+        <a class="btn btn-success mr-2" asp-controller="Roles" asp-action="Index">Roles</a>
+        <a class="btn btn-secondary mr-2" asp-controller="Users" asp-action="Index">Users</a>
         <a asp-action="AddRole" asp-controller="Roles" class="btn btn-primary mr-2">New Role</a>
         <a asp-action="DisplayRoles" class="btn btn-success mr-2">View Roles</a>
         <a asp-action="AddUserToRole" class="btn btn-info mr-2">Assign user to role</a>
-        <a asp-action="Index" asp-controller="ReservationTypes" class="btn btn-outline-primary">Resservation Type</a>
     </div>
     <div class="m-1 d-flex justify-content-around">
-        <a class="btn btn-success mr-2" asp-controller="Roles" asp-action="Index">Roles</a>
         <a class="btn btn-info mr-2" asp-controller="Reservation" asp-action="Index">Reservations</a>
-        <a class="btn btn-secondary mr-2" asp-controller="Users" asp-action="Index">Users</a>
-        <a class="btn btn-danger mr-2" asp-controller="Admin" asp-action="Dashboard">Back To DashBoard</a>
+        <a asp-action="Index" asp-controller="ReservationTypes" class="btn btn-warning mr-2">Resservation Type</a>
+
+        @if (!ViewData["Title"].Equals("Dashboard"))
+   {
+            <a class="btn btn-danger mr-2" asp-controller="Admin" asp-action="Dashboard">Back To DashBoard</a>
+
+}        
+
     </div>
 </div>
 <hr />

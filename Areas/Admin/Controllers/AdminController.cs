@@ -4,29 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ReservationApp.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class AdminController : Controller
-    {
+     [Area("Admin")]
+     public class AdminController : Controller
+     {
 
-        private readonly UserManager<IdentityUser> _userManager;
+          private readonly UserManager<IdentityUser> _userManager;
 
-        public AdminController(UserManager<IdentityUser> userManager)
-        {
-            _userManager = userManager;
-        }
+          public AdminController(UserManager<IdentityUser> userManager)
+          {
+               _userManager = userManager;
+          }
 
 
-        [Route("/Admin")]
-        public IActionResult Dashboard()
-        {
-            return View("DashBoard");
-        }
-        public async Task<IActionResult> Index()
-        {
-            var x = await _userManager.GetUsersInRoleAsync("Student");
-            ViewBag.Students = x;
-            return View();
-        }
+          [Route("/Admin")]
+          public IActionResult Dashboard()
+          {
+               return View("DashBoard");
+          }
 
-    }
+
+     }
 }
