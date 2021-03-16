@@ -33,21 +33,28 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cause)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Student.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReservationType.Name)
-                </td>
+                <form method="post" asp-action="Submit">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        <select class="form-control text-center" custom-select" asp-items="@ViewBag.StatusList"
+                            Select="@item.Status">
+
+                        </select>
+                        @* @Html.DisplayFor(modelItem => item.Status) *@
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cause)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Student.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReservationType.Name)
+                    </td>
+                </form>
+
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

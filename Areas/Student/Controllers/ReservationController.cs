@@ -222,7 +222,13 @@ namespace ReservationApp.Areas.Student.Controllers
                return RedirectToAction(nameof(Index));
           }
 
-          private bool ReservationExists(string id)
+
+          public IActionResult Submit()
+          {
+
+              return RedirectToAction(nameof(Index));
+          }
+        private bool ReservationExists(string id)
           {
                return _context.Reservations.Any(e => e.Id == id);
           }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ReservationApp.Data;
+using ReservationApp.Help;
 using ReservationApp.Models;
 using ReservationApp.ViewModels;
 
@@ -50,6 +51,8 @@ namespace ReservationApp.Areas.Admin.Controllers
                //            ReservationType = rt.Name,
                //        }
                //);
+               ViewBag.StatusList = Helpers.StatusList();
+
                var dateNow = DateTime.UtcNow;
                var gtmDate = dateNow.ToLocalTime().Date;
                //CreateDate = TimeZoneInfo.ConvertTimeFromUtc(dateNow,TimeZoneInfo.Local);
