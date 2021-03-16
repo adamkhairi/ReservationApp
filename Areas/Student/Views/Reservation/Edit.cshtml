@@ -28,10 +28,15 @@
                 <input asp-for="Cause" class="form-control" />
                 <span asp-validation-for="Cause" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CreateDate" class="control-label"></label>
-                <input asp-for="CreateDate" class="form-control" />
-                <span asp-validation-for="CreateDate" class="text-danger"></span>
+            <div class="form-group d-none">
+                <label asp-for="StudentId" class="control-label"></label>
+                <input asp-for="StudentId" class="form-control" />
+                <span asp-validation-for="StudentId" class="text-danger"></span>
+            </div>
+            <div class="form-group d-none">
+                <label asp-for="ReservationTypeId" class="control-label"></label>
+                <input asp-for="ReservationTypeId" class="form-control" />
+                <span asp-validation-for="ReservationTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

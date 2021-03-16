@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using ReservationApp.Data;
 using ReservationApp.Models;
 using ReservationApp.ViewModels;
-
+using ReservationApp.Help;
 namespace ReservationApp.Areas.Student.Controllers
 {
      [Area("Student")]
@@ -26,7 +26,7 @@ namespace ReservationApp.Areas.Student.Controllers
                _userManager = userManager;
           }
 
-          // GET: Student/Reservation
+
           public async Task<IActionResult> Index()
           {
                //var res = await _context.Reservations.ToListAsync();
@@ -35,6 +35,7 @@ namespace ReservationApp.Areas.Student.Controllers
                var UserReservation = await _context.Reservations
                    .Select(res => new ReservationStudentViewModel
                    {
+                        Id = res.Id,
                         StudentId = res.StudentId,
                         Date = res.Date,
                         Status = res.Status,
@@ -42,13 +43,14 @@ namespace ReservationApp.Areas.Student.Controllers
                         ReservationTypeId = res.ReservationType.Id,
                         Name = res.ReservationType.Name,
                         Student = res.Student,
+                        CreateDate = res.CreateDate,
                    })
                .Where(res => res.StudentId == user.Id)
                .ToListAsync();
                return View(UserReservation);
           }
 
-          // GET: Student/Reservation/Details/5
+
           public async Task<IActionResult> Details(string id)
           {
                if (id == null)
@@ -57,7 +59,18 @@ namespace ReservationApp.Areas.Student.Controllers
                }
 
                var reservation = await _context.Reservations
-                   .FirstOrDefaultAsync(m => m.Id == id);
+                   .Select(m => new ReservationStudentViewModel
+                     {
+                          Id = m.Id,
+                          StudentId = m.StudentId,
+                          Date = m.Date,
+                          Status = m.Status,
+                          Cause = m.Cause,
+                          ReservationTypeId = m.ReservationType.Id,
+                          Name = m.ReservationType.Name,
+                          Student = m.Student,
+                          CreateDate = m.CreateDate,
+                     }).FirstOrDefaultAsync(m=>m.Id == id);
                if (reservation == null)
                {
                     return NotFound();
@@ -66,7 +79,7 @@ namespace ReservationApp.Areas.Student.Controllers
                return View(reservation);
           }
 
-          // GET: Student/Reservation/Create
+          [HttpGet]
           public IActionResult Create()
           {
                var reservationType = _context.ReservationTypes.Select(t => new SelectListItem
@@ -74,13 +87,18 @@ namespace ReservationApp.Areas.Student.Controllers
                     Value = t.Id,
                     Text = t.Name
                });
-               ViewBag.ResType = reservationType;
+            //var StatusMessage = new SelectList(Status.GetValues(typeof(Status)))
+            //.OfType<Status>()
+            //.Select(t => new SelectListItem{
+            //     Text = t.ToString(),
+            //     Value = t,
+            //});
+            
+            ViewBag.StatusList = Helpers.StatusList();
+            ViewBag.ResType = reservationType;
                return View();
           }
 
-          // POST: Student/Reservation/Create
-          // To protect from overposting attacks, enable the specific properties you want to bind to.
-          // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
           [HttpPost]
           [ValidateAntiForgeryToken]
           public async Task<IActionResult> Create(ReservationStudentViewModel reservation)
@@ -99,7 +117,7 @@ namespace ReservationApp.Areas.Student.Controllers
                          Status = reservation.Status,
                          Cause = reservation.Cause,
                          StudentId = userId,
-                         ReservationType = type,
+                         ReservationTypeId = type.Id,
 
                          // Student = await _context.Users.FirstAsync(s=>s.Id == userId),
                          // ReservationType = await  _context.ReservationTypes.FirstAsync(x=> x.Id == type.Id)
@@ -113,7 +131,7 @@ namespace ReservationApp.Areas.Student.Controllers
                return View(reservation);
           }
 
-          // GET: Student/Reservation/Edit/5
+
           public async Task<IActionResult> Edit(string id)
           {
                if (id == null)
@@ -122,6 +140,18 @@ namespace ReservationApp.Areas.Student.Controllers
                }
 
                var reservation = await _context.Reservations.FindAsync(id);
+               //var res = new ReservationStudentViewModel
+               //{
+               //    Id = id,
+               //    StudentId = reservation.StudentId,
+               //    Cause = reservation.Cause,
+               //    Date = reservation.Date,
+               //    Name = reservation.ReservationType.Name,
+               //    ReservationTypeId = reservation.ReservationTypeId,
+               //    Status = reservation.Status
+               //};
+
+
                if (reservation == null)
                {
                     return NotFound();
@@ -129,12 +159,10 @@ namespace ReservationApp.Areas.Student.Controllers
                return View(reservation);
           }
 
-          // POST: Student/Reservation/Edit/5
-          // To protect from overposting attacks, enable the specific properties you want to bind to.
-          // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
           [HttpPost]
           [ValidateAntiForgeryToken]
-          public async Task<IActionResult> Edit(string id, [Bind("Id,Date,Status,Cause,CreateDate")] Reservation reservation)
+          public async Task<IActionResult> Edit(string id, Reservation reservation)
           {
                if (id != reservation.Id)
                {
@@ -145,6 +173,8 @@ namespace ReservationApp.Areas.Student.Controllers
                {
                     try
                     {
+                        //var upRes = await _context.Reservations.SingleAsync(x=>x.Id == id);
+                       
                          _context.Update(reservation);
                          await _context.SaveChangesAsync();
                     }
@@ -164,7 +194,6 @@ namespace ReservationApp.Areas.Student.Controllers
                return View(reservation);
           }
 
-          // GET: Student/Reservation/Delete/5
           public async Task<IActionResult> Delete(string id)
           {
                if (id == null)
@@ -182,7 +211,7 @@ namespace ReservationApp.Areas.Student.Controllers
                return View(reservation);
           }
 
-          // POST: Student/Reservation/Delete/5
+
           [HttpPost, ActionName("Delete")]
           [ValidateAntiForgeryToken]
           public async Task<IActionResult> DeleteConfirmed(string id)

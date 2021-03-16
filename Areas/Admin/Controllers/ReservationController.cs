@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,13 +19,16 @@ namespace ReservationApp.Areas.Admin.Controllers
      public class ReservationController : Controller
      {
           private readonly ApplicationDbContext _context;
+          private readonly UserManager<IdentityUser> _userManager;
 
-          public ReservationController(ApplicationDbContext context)
+          public ReservationController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
           {
                _context = context;
+               _userManager = userManager;
+
           }
 
-          // GET: Admin/Reservation
+
           public async Task<IActionResult> Index()
           {
                //var applicationDbContext = _context.Reservations.Include(r => r.Student);
@@ -46,19 +50,29 @@ namespace ReservationApp.Areas.Admin.Controllers
                //            ReservationType = rt.Name,
                //        }
                //);
+               var dateNow = DateTime.UtcNow;
+               var gtmDate = dateNow.ToLocalTime().Date;
+               //CreateDate = TimeZoneInfo.ConvertTimeFromUtc(dateNow,TimeZoneInfo.Local);
+
+               //var admin = _userManager.GetUserAsync(User);
+               // var WaitingRes = await _context.Reservations
+               // //.OrderBy(r => r.Status.ToString())
+               // .Select(r => r.Status == Status.Pending.ToString() && r.Date == gtmDate)
+               // .ToListAsync();
 
                //var xx = _context.ReservationTypes;
-               var List = await _context.Reservations
+
+               var list = await _context.Reservations
                    .Include(x => x.ReservationType)
                    .Include(s => s.Student)
-
-
+                   .Where(x => x.Status == Status.Pending.ToString())
+                   .OrderByDescending(r => r.Date)
                    .ToListAsync();
+
                //return AbsenceHistories;
-               return View("List", List);
+               return View("List", list);
           }
 
-          // GET: Admin/Reservation/Details/5
           public async Task<IActionResult> Details(string id)
           {
                if (id == null)
@@ -69,6 +83,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                var reservation = await _context.Reservations
                    .Include(r => r.Student)
                    .FirstOrDefaultAsync(m => m.Id == id);
+
                if (reservation == null)
                {
                     return NotFound();
@@ -77,7 +92,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                return View(reservation);
           }
 
-          // GET: Admin/Reservation/Edit/5
+
           public async Task<IActionResult> Edit(string id)
           {
                if (id == null)
@@ -94,9 +109,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                return View(reservation);
           }
 
-          // POST: Admin/Reservation/Edit/5
-          // To protect from overposting attacks, enable the specific properties you want to bind to.
-          // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
           [HttpPost]
           [ValidateAntiForgeryToken]
           public async Task<IActionResult> Edit(string id, [Bind("Id,Date,Status,Cause,StudentId,TypeId")] Reservation reservation)
@@ -130,7 +143,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                return View(reservation);
           }
 
-          // GET: Admin/Reservation/Delete/5
+
           public async Task<IActionResult> Delete(string id)
           {
                if (id == null)
@@ -149,7 +162,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                return View(reservation);
           }
 
-          // POST: Admin/Reservation/Delete/5
+
           [HttpPost, ActionName("Delete")]
           [ValidateAntiForgeryToken]
           public async Task<IActionResult> DeleteConfirmed(string id)
@@ -159,6 +172,8 @@ namespace ReservationApp.Areas.Admin.Controllers
                await _context.SaveChangesAsync();
                return RedirectToAction(nameof(Index));
           }
+
+
 
           private bool ReservationExists(string id)
           {

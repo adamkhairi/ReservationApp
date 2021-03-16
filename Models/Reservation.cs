@@ -7,6 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ReservationApp.Models
 {
@@ -26,7 +27,9 @@ namespace ReservationApp.Models
           public string Cause { get; set; }
           public IdentityUser Student { get; set; }
 
+          [ForeignKey("StudentId,ReservationTypeId")]
           public string StudentId { get; set; }
+          public string ReservationTypeId { get; set; }
           //public Student Student { get; set; }
           //   public string TypeId { get; set; }
 

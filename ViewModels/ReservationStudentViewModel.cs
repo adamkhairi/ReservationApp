@@ -21,19 +21,28 @@ namespace ReservationApp.ViewModels
           public string StudentId { get; set; }
           public IdentityUser Student { get; set; }
           //public string LastName { get; set; }
-          // //TODO:Fix This
+
+          //TODO: Fix This
           [DisplayName("Reservation Date")]
           [DataType(DataType.Date)]
           [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
           public DateTime Date { get; set; }
           public string Status { get; set; }
           public string Cause { get; set; }
-          //public string SearchString { get; set; }
+
           [DisplayName("Reservation Type Id")]
           public string ReservationTypeId { get; set; }
+
           [DisplayName("Reservation Type")]
           public string Name { get; set; }
+          public DateTime CreateDate { get; set; }
 
+          public ReservationStudentViewModel()
+          {
+               var dateNow = DateTime.UtcNow;
+               this.Status = Models.Status.Pending.ToString();
+               this.CreateDate = dateNow.ToLocalTime().Date;
+          }
 
 
      }

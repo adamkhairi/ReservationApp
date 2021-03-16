@@ -13,6 +13,8 @@ namespace ReservationApp.Areas.Student.Controllers
                _userManager = userManager;
 
           }
+
+
           [Route("/Student")]
           public IActionResult Student()
           {

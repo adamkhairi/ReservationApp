@@ -26,6 +26,7 @@ namespace ReservationApp.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [Route("Admin/UserToRole")]
         public async Task<IActionResult>  Index()
         {
             var UserList = await _userManager.Users.ToListAsync();

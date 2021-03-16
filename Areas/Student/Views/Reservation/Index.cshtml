@@ -4,15 +4,16 @@
 
 @inject UserManager<IdentityUser> _userManager
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Reservation";
     var user = await _userManager.GetUserAsync(User);
 }
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="row">
+    <a class="btn btn-outline-primary mx-auto " asp-action="Create">Create New</a>
+</div>
+
 
 <p>@user.Id</p>
 <table class="table">
@@ -21,18 +22,18 @@
             <th>
                 @Html.DisplayNameFor(model => model.Date)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Status)
-            </th>
+                </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Cause)
             </th>
             @*<th>
                 @Html.DisplayNameFor(model => model.CreateDate)
                 </th>*@
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Student.Email)
-            </th>
+                </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -46,15 +47,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
-                <td>
+                @* <td>
                     @Html.DisplayFor(modelItem => item.Status)
-                </td>
+                    </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.Cause)
                 </td>
-                <td>
+                @* <td>
                     @Html.DisplayFor(modelItem => item.Student.UserName)
-                </td>
+                    </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
