@@ -32,48 +32,36 @@ namespace ReservationApp.Areas.Admin.Controllers
 
           public async Task<IActionResult> Index()
           {
-               //var applicationDbContext = _context.Reservations.Include(r => r.Student);
-               //var Lisst = (
-
-               //        from r in _context.Reservations
-               //        join s in _context.Students
-               //            on r.Student.Id equals s.Id
-               //        join rt in _context.ReservationTypes
-               //            on r.ReservationType.Id equals rt.Id
-               //        select new ReservationStudentViewModel()
-               //        {
-               //            Id = s.Id,
-               //            UserName = s.UserName,
-               //            Email = s.Email,
-               //            Date = r.Date,
-               //            Cause = r.Cause,
-               //            Status = r.Status,
-               //            ReservationType = rt.Name,
-               //        }
-               //);
                ViewBag.StatusList = Helpers.StatusList();
-
-               var dateNow = DateTime.UtcNow;
-               var gtmDate = dateNow.ToLocalTime().Date;
-               //CreateDate = TimeZoneInfo.ConvertTimeFromUtc(dateNow,TimeZoneInfo.Local);
-
-               //var admin = _userManager.GetUserAsync(User);
-               // var WaitingRes = await _context.Reservations
-               // //.OrderBy(r => r.Status.ToString())
-               // .Select(r => r.Status == Status.Pending.ToString() && r.Date == gtmDate)
-               // .ToListAsync();
-
-               //var xx = _context.ReservationTypes;
-
                var list = await _context.Reservations
                    .Include(x => x.ReservationType)
                    .Include(s => s.Student)
                    .Where(x => x.Status == Status.Pending.ToString())
-                   .OrderByDescending(r => r.Date)
+                   .OrderBy(r => r.Date)
                    .ToListAsync();
-
                //return AbsenceHistories;
                return View("List", list);
+          }
+
+
+          public async Task<ActionResult> FilterByDate(DateTime filterDate)
+          {
+               if (filterDate.Year == 0001)
+               {
+                    return RedirectToAction(nameof(Index));
+               }
+               else
+               {
+                    ViewBag.StatusList = Helpers.StatusList();
+
+                    var list = await _context.Reservations
+                                   .Include(t => t.ReservationType)
+                                   .Include(s => s.Student)
+                                   .OrderBy(r => r.Date)
+                                   .Where(r => r.Date == filterDate)
+                                   .ToListAsync();
+                    return View("List", list);
+               }
           }
 
           public async Task<IActionResult> Details(string id)
@@ -176,7 +164,30 @@ namespace ReservationApp.Areas.Admin.Controllers
                return RedirectToAction(nameof(Index));
           }
 
+          [HttpPost]
+          public async Task<IActionResult> Submit(string id, string status)
+          {
+               var reservation = await _context.Reservations
+                   .Include(r => r.Student)
+                   .FirstAsync(r => r.Id == id);
+               reservation.Status = status;
+               _context.Update(reservation);
 
+               if (status == Status.Approved.ToString())
+               {
+                    var UId = reservation.Student.Id;
+                    var student = await _context.FindAsync<Models.Student>(UId);
+
+
+                    student.ReservationCount += 1;
+
+
+                    _context.Update(student);
+               }
+               await _context.SaveChangesAsync();
+               return RedirectToAction(nameof(Index));
+
+          }
 
           private bool ReservationExists(string id)
           {

@@ -21,7 +21,10 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
+
             </th>
+            @* <th>
+                </th> *@
             @* <th>
                 @Html.DisplayNameFor(model => model.Status)
                 </th> *@
@@ -37,13 +40,22 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
+                @* <td>
+                    @if(item.Status == Status.Approved.ToString()){
+                    <a class="btn btn-"></a>
+                    }else if(){
+
+                    }else{
+
+                    }
+                    </td> *@
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>

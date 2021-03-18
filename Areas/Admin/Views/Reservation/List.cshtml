@@ -1,4 +1,6 @@
 ﻿@*@model List<ReservationApp.ViewModels.ReservationStudentViewModel>*@
+@using System.Linq
+@using ReservationApp.ViewModels
 @model List<Reservation>
 @{
     ViewData["Title"] = "Index";
@@ -7,15 +9,20 @@
 @await Html.PartialAsync("_TopMenuPartial")
 
 <h1>Index</h1>
+<div class="d-flex m-1">
+    <form asp-action="FilterByDate" asp-controller="Reservation">
+        <label for="filterDate" class="form-control-label mr-3">Date :</label>
+        <input type="date" class="form-control-date text-center" id="filterDate" name="filterDate">
+    </form>
+    <button class="btn p-1 px-2 rounded-circle btn-primary" asp-controller="Reservation"
+        asp-action="Index">&#10008;</button>
+</div>
 
 <table class="table">
     <thead>
         <tr>
             <th>
                 Date
-            </th>
-            <th>
-                Status
             </th>
             <th>
                 Cause
@@ -26,6 +33,10 @@
             <th>
                 Reservation Type
             </th>
+            <th>
+                Status
+            </th>
+            <th>Actions</th>
             <th></th>
         </tr>
     </thead>
@@ -33,27 +44,34 @@
         @foreach (var item in Model)
         {
             <tr>
-                <form method="post" asp-action="Submit">
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        <select class="form-control text-center" custom-select" asp-items="@ViewBag.StatusList"
-                            Select="@item.Status">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cause)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReservationType.Name)
+                </td>
+
+                <td>
+                    <form asp-area="Admin" class="StatusForm" asp-action="Submit" asp-controller="Reservation">
+
+
+                        <input class="form-control d-none" type="text" name="Id" value="@item.Id">
+
+                        <select class="form-control text-center Status custom-select" asp-items="@ViewBag.StatusList"
+                            Select="@item.Status" name="status">
 
                         </select>
                         @* @Html.DisplayFor(modelItem => item.Status) *@
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Cause)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Student.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReservationType.Name)
-                    </td>
-                </form>
+
+
+                    </form>
+                </td>
 
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -64,3 +82,19 @@
         }
     </tbody>
 </table>
+
+<script>
+
+    document.querySelectorAll(".Status").forEach(x => {
+        x.addEventListener("change", () => {
+            x.parentElement.submit();
+        })
+    });
+
+    let datePicker = document.getElementById("filterDate");
+
+    datePicker.addEventListener("change", () => {
+        datePicker.parentElement.submit();
+    })
+
+</script>

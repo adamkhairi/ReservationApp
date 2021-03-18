@@ -24,14 +24,11 @@ namespace ReservationApp.Help
                    (item, index) => new SelectListItem
                    {
                         Text = item.ToString(),
-                        Value = (index).ToString(),
+                        Value = item.ToString(),
                    }).ToList());
 
                var statusMessage = new SelectList(enumData, "Id", "Name");
                return itemsList;
           }
-
-
-
      }
 }

@@ -60,17 +60,17 @@ namespace ReservationApp.Areas.Student.Controllers
 
                var reservation = await _context.Reservations
                    .Select(m => new ReservationStudentViewModel
-                     {
-                          Id = m.Id,
-                          StudentId = m.StudentId,
-                          Date = m.Date,
-                          Status = m.Status,
-                          Cause = m.Cause,
-                          ReservationTypeId = m.ReservationType.Id,
-                          Name = m.ReservationType.Name,
-                          Student = m.Student,
-                          CreateDate = m.CreateDate,
-                     }).FirstOrDefaultAsync(m=>m.Id == id);
+                   {
+                        Id = m.Id,
+                        StudentId = m.StudentId,
+                        Date = m.Date,
+                        Status = m.Status,
+                        Cause = m.Cause,
+                        ReservationTypeId = m.ReservationType.Id,
+                        Name = m.ReservationType.Name,
+                        Student = m.Student,
+                        CreateDate = m.CreateDate,
+                   }).FirstOrDefaultAsync(m => m.Id == id);
                if (reservation == null)
                {
                     return NotFound();
@@ -78,6 +78,7 @@ namespace ReservationApp.Areas.Student.Controllers
 
                return View(reservation);
           }
+
 
           [HttpGet]
           public IActionResult Create()
@@ -87,15 +88,15 @@ namespace ReservationApp.Areas.Student.Controllers
                     Value = t.Id,
                     Text = t.Name
                });
-            //var StatusMessage = new SelectList(Status.GetValues(typeof(Status)))
-            //.OfType<Status>()
-            //.Select(t => new SelectListItem{
-            //     Text = t.ToString(),
-            //     Value = t,
-            //});
-            
-            ViewBag.StatusList = Helpers.StatusList();
-            ViewBag.ResType = reservationType;
+               //var StatusMessage = new SelectList(Status.GetValues(typeof(Status)))
+               //.OfType<Status>()
+               //.Select(t => new SelectListItem{
+               //     Text = t.ToString(),
+               //     Value = t,
+               //});
+
+               ViewBag.StatusList = Helpers.StatusList();
+               ViewBag.ResType = reservationType;
                return View();
           }
 
@@ -173,8 +174,8 @@ namespace ReservationApp.Areas.Student.Controllers
                {
                     try
                     {
-                        //var upRes = await _context.Reservations.SingleAsync(x=>x.Id == id);
-                       
+                         //var upRes = await _context.Reservations.SingleAsync(x=>x.Id == id);
+
                          _context.Update(reservation);
                          await _context.SaveChangesAsync();
                     }
@@ -223,12 +224,8 @@ namespace ReservationApp.Areas.Student.Controllers
           }
 
 
-          public IActionResult Submit()
-          {
 
-              return RedirectToAction(nameof(Index));
-          }
-        private bool ReservationExists(string id)
+          private bool ReservationExists(string id)
           {
                return _context.Reservations.Any(e => e.Id == id);
           }
