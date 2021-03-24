@@ -60,7 +60,7 @@ namespace ReservationApp.Areas.Identity.Pages.Account
                public string PhoneNumber { get; set; }
 
                [Required]
-               [StringLength(200, ErrorMessage = "Please enter your full name")]
+               [StringLength(200)]
                [Display(Name = "Full Name")]
                public string FullName { get; set; }
 
@@ -94,7 +94,7 @@ namespace ReservationApp.Areas.Identity.Pages.Account
                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                if (ModelState.IsValid)
                {
-                    var user = new Models.Student { UserName = Input.FullName, Email = Input.Email, FullName = Input.FullName, Class = Input.Class, PhoneNumber = Input.PhoneNumber };
+                    var user = new Models.Student { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName, Class = Input.Class, PhoneNumber = Input.PhoneNumber };
                     var result = await _userManager.CreateAsync(user, Input.Password);
                     if (result.Succeeded)
                     {
