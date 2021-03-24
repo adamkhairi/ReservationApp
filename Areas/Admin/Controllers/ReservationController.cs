@@ -37,7 +37,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                    .Include(x => x.ReservationType)
                    .Include(s => s.Student)
                    .Where(x => x.Status == Status.Pending.ToString())
-                   .OrderBy(r => r.Date)
+                   .OrderBy(r => r.Student)
                    .ToListAsync();
                //return AbsenceHistories;
                return View("List", list);
@@ -165,18 +165,24 @@ namespace ReservationApp.Areas.Admin.Controllers
           }
 
           [HttpPost]
+
           public async Task<IActionResult> Submit(string id, string status)
           {
                var reservation = await _context.Reservations
+
                    .Include(r => r.Student)
+                   .Include(r => r.ReservationType)
                    .FirstAsync(r => r.Id == id);
+
                reservation.Status = status;
+
                _context.Update(reservation);
 
                if (status == Status.Approved.ToString())
                {
                     var UId = reservation.Student.Id;
                     var student = await _context.FindAsync<Models.Student>(UId);
+                    //var user = await _context.Students.FindAsync(UId);
 
 
                     student.ReservationCount += 1;

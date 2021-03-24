@@ -12,7 +12,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
+using ReservationApp.Help;
 using ReservationApp.Models;
 
 namespace ReservationApp.Areas.Identity.Pages.Account
@@ -51,13 +54,20 @@ namespace ReservationApp.Areas.Identity.Pages.Account
                [Display(Name = "Email")]
                public string Email { get; set; }
 
+               [Required]
+               // [PhoneNumber]
+               [Display(Name = "Phone Number")]
+               public string PhoneNumber { get; set; }
+
+               [Required]
                [StringLength(200, ErrorMessage = "Please enter your full name")]
                [Display(Name = "Full Name")]
                public string FullName { get; set; }
 
-
+               [Required]
+               [Display(Name = "Class name")]
+               [StringLength(100, ErrorMessage = "Please choose the Class your belong")]
                public string Class { get; set; }
-
 
                [Required]
                [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -79,11 +89,12 @@ namespace ReservationApp.Areas.Identity.Pages.Account
 
           public async Task<IActionResult> OnPostAsync(string returnUrl = null)
           {
+
                returnUrl ??= Url.Content("~/");
                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
                if (ModelState.IsValid)
                {
-                    var user = new Models.Student { UserName = Input.Email, Email = Input.Email, FullName = Input.FullName };
+                    var user = new Models.Student { UserName = Input.FullName, Email = Input.Email, FullName = Input.FullName, Class = Input.Class, PhoneNumber = Input.PhoneNumber };
                     var result = await _userManager.CreateAsync(user, Input.Password);
                     if (result.Succeeded)
                     {

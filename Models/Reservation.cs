@@ -25,7 +25,7 @@ namespace ReservationApp.Models
 
           [AllowNull]
           public string Cause { get; set; }
-          public IdentityUser Student { get; set; }
+          public Student Student { get; set; }
 
           [ForeignKey("StudentId,ReservationTypeId")]
           public string StudentId { get; set; }

@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +12,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
+@{
+    if (SignInManager.IsSignedIn(User))
+    {
+
+        var user = await UserManager.FindByNameAsync(User.Identity.Name);
+    }
+}
 
 <body>
     <header>
