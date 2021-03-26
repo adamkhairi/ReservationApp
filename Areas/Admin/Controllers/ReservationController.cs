@@ -33,17 +33,37 @@ namespace ReservationApp.Areas.Admin.Controllers
           public async Task<IActionResult> Index()
           {
                ViewBag.StatusList = Helpers.StatusList();
-               var list = await _context.Reservations
-                   .Include(x => x.ReservationType)
-                   .Include(s => s.Student)
-                   .Where(x => x.Status == Status.Pending.ToString())
-                   .OrderBy(r => r.Student)
-                   .ToListAsync();
+               var list = await _context.GetAllReservations();
                //return AbsenceHistories;
                return View("List", list);
           }
 
 
+
+          //TODO: Add View To 
+          public async Task<IActionResult> ResByStudent(string id)
+          {
+               if (id == null)
+               {
+                    return NotFound();
+               }
+
+               var user = await _userManager.GetUserAsync(User);
+               if (user == null)
+               {
+                    return NotFound();
+               }
+               var list = await _context.SudentReservations(user.Id);
+
+               if (list.Count == 0)
+               {
+                    return NotFound();
+               }
+               return View("List", list);
+          }
+
+
+          [HttpGet]
           public async Task<ActionResult> FilterByDate(DateTime filterDate)
           {
                if (filterDate.Year == 0001)
@@ -54,16 +74,13 @@ namespace ReservationApp.Areas.Admin.Controllers
                {
                     ViewBag.StatusList = Helpers.StatusList();
 
-                    var list = await _context.Reservations
-                                   .Include(t => t.ReservationType)
-                                   .Include(s => s.Student)
-                                   .OrderBy(r => r.Date)
-                                   .Where(r => r.Date == filterDate)
-                                   .ToListAsync();
+                    var list = await _context.GetReservationsByDate(filterDate);
                     return View("List", list);
                }
           }
 
+
+          [HttpGet]
           public async Task<IActionResult> Details(string id)
           {
                if (id == null)
@@ -71,9 +88,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                     return NotFound();
                }
 
-               var reservation = await _context.Reservations
-                   .Include(r => r.Student)
-                   .FirstOrDefaultAsync(m => m.Id == id);
+               var reservation = await _context.ResByID(id);
 
                if (reservation == null)
                {
@@ -83,7 +98,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                return View(reservation);
           }
 
-
+          [HttpGet]
           public async Task<IActionResult> Edit(string id)
           {
                if (id == null)
@@ -91,7 +106,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                     return NotFound();
                }
 
-               var reservation = await _context.Reservations.FindAsync(id);
+               var reservation = await _context.ResByID(id);
                if (reservation == null)
                {
                     return NotFound();
@@ -135,6 +150,7 @@ namespace ReservationApp.Areas.Admin.Controllers
           }
 
 
+          [HttpGet]
           public async Task<IActionResult> Delete(string id)
           {
                if (id == null)
@@ -142,9 +158,7 @@ namespace ReservationApp.Areas.Admin.Controllers
                     return NotFound();
                }
 
-               var reservation = await _context.Reservations
-                   .Include(r => r.Student)
-                   .FirstOrDefaultAsync(m => m.Id == id);
+               var reservation = await _context.ResByID(id);
                if (reservation == null)
                {
                     return NotFound();
@@ -158,21 +172,20 @@ namespace ReservationApp.Areas.Admin.Controllers
           [ValidateAntiForgeryToken]
           public async Task<IActionResult> DeleteConfirmed(string id)
           {
-               var reservation = await _context.Reservations.FindAsync(id);
+               var reservation = await _context.ResByID(id);
+
                _context.Reservations.Remove(reservation);
+
                await _context.SaveChangesAsync();
+
                return RedirectToAction(nameof(Index));
           }
 
-          [HttpPost]
 
+          [HttpPost]
           public async Task<IActionResult> Submit(string id, string status)
           {
-               var reservation = await _context.Reservations
-
-                   .Include(r => r.Student)
-                   .Include(r => r.ReservationType)
-                   .FirstAsync(r => r.Id == id);
+               var reservation = await _context.ResByID(id);
 
                reservation.Status = status;
 
@@ -181,19 +194,16 @@ namespace ReservationApp.Areas.Admin.Controllers
                if (status == Status.Approved.ToString())
                {
                     var UId = reservation.Student.Id;
-                    var student = await _context.FindAsync<Models.Student>(UId);
-                    //var user = await _context.Students.FindAsync(UId);
-
+                    var student = await _context.GetStudentById(UId);
 
                     student.ReservationCount += 1;
-
-
                     _context.Update(student);
                }
+
                await _context.SaveChangesAsync();
                return RedirectToAction(nameof(Index));
-
           }
+
 
           private bool ReservationExists(string id)
           {

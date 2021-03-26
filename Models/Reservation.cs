@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ReservationApp.Help;
 
 namespace ReservationApp.Models
 {
@@ -42,9 +43,7 @@ namespace ReservationApp.Models
 
           public Reservation()
           {
-               var dateNow = DateTime.UtcNow;
-               //CreateDate = TimeZoneInfo.ConvertTimeFromUtc(dateNow,TimeZoneInfo.Local);
-               this.CreateDate = dateNow.ToLocalTime().Date;
+               this.CreateDate = Helpers.CurrentDay();
                this.Status = Models.Status.Pending.ToString();
           }
      }
