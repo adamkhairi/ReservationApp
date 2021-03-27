@@ -32,9 +32,9 @@ namespace ReservationApp.Areas.Student.Controllers
                var user = await _userManager.GetUserAsync(User);
 
                var tomorrow = Helpers.CurrentDay().AddDays(1);
-               var UserReservation = _context.SudentResOfDay(user.Id, tomorrow);
+               var UserReservation = await _context.SudentResOfDay(user.Id, tomorrow);
                var ApprovedReservation = await _context.SudentApprovedRes(user.Id);
-               return View(ApprovedReservation);
+               return View(UserReservation);
           }
 
 

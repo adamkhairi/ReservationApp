@@ -10,12 +10,13 @@
 
 <h1>Index</h1>
 <div class="d-flex m-1">
-    <form asp-action="FilterByDate" asp-controller="Reservation">
+    <form asp-action="Index" asp-controller="Reservation" asp-area="Admin">
         <label for="filterDate" class="form-control-label mr-3">Date :</label>
         <input type="date" class="form-control-date text-center" id="filterDate" name="filterDate">
     </form>
-    <button class="btn p-1 px-2 rounded-circle btn-primary" asp-controller="Reservation"
-        asp-action="Index">&#10008;</button>
+    <a asp-controller="Reservation" asp-action="Index">
+        <button class="btn p-0 mx-2 px-1 rounded-circle btn-primary" type="submit">&#10008;</button>
+    </a>
 </div>
 
 <table class="table">

@@ -6,6 +6,7 @@
 @{
     ViewData["Title"] = "Reservation";
     var user = await _userManager.GetUserAsync(User);
+
 }
 
 <h1>Index</h1>
@@ -20,7 +21,7 @@
     <thead>
         <tr>
             <th>
-
+                Status
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
@@ -49,6 +50,8 @@
     <tbody>
         @foreach (var item in Model)
         {
+            var status = item.Status;
+
             <tr>
                 @* <td>
                     @if(item.Status == Status.Approved.ToString()){
@@ -59,6 +62,20 @@
 
                     }
                     </td> *@
+                <td>
+                    @if (status == Status.Approved.ToString())
+                    {
+                        <p class="text-success text-center m-1 h-2">&#x2714;</p>
+                    }
+                    else if (status == Status.Pending.ToString())
+                    {
+                        <p class="text-primary text-center m-1 h-2">&#x21bb;</p>
+                    }
+                    else
+                    {
+                        <p class="text-danger text-center m-1 dis h-2">&#x2718;</p>
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>

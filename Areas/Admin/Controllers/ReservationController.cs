@@ -63,8 +63,8 @@ namespace ReservationApp.Areas.Admin.Controllers
           }
 
 
-          [HttpGet]
-          public async Task<ActionResult> FilterByDate(DateTime filterDate)
+          [HttpPost]
+          public async Task<ActionResult> Index(DateTime filterDate)
           {
                if (filterDate.Year == 0001)
                {
