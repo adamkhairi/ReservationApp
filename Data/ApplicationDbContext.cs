@@ -37,7 +37,7 @@ namespace ReservationApp.Data
                     .Include(x => x.ReservationType)
                     .Include(s => s.Student)
                     .Where(x => x.Status == Status.Pending.ToString())
-                    .OrderBy(r => r.Student)
+                    .OrderByDescending(r => r.Date)
                     .ToListAsync();
                return reservationData;
           }
@@ -74,6 +74,7 @@ namespace ReservationApp.Data
                          CreateDate = res.CreateDate,
                     })
                     .Where(res => res.StudentId == studentId)
+                    .OrderByDescending(res => res.Date)
                     .ToListAsync();
 
                return list;
@@ -105,6 +106,29 @@ namespace ReservationApp.Data
           }
 
 
+          // GET_STUDENT_RESERVATIONS_BY_DATE
+          public async Task<List<ReservationStudentViewModel>> SudentResOfCreateDate(string studentId, DateTime date)
+          {
+
+               var list = await Reservations.Select(
+                    res => new ReservationStudentViewModel
+                    {
+                         Id = res.Id,
+                         StudentId = res.StudentId,
+                         Date = res.Date,
+                         Status = res.Status,
+                         Cause = res.Cause,
+                         ReservationTypeId = res.ReservationType.Id,
+                         Name = res.ReservationType.Name,
+                         Student = res.Student,
+                         CreateDate = res.CreateDate,
+                    })
+                    .Where(res => res.StudentId == studentId)
+                    .Where(res => res.CreateDate == date)
+                    .ToListAsync();
+
+               return list;
+          }
           // GET_RESERVATION_BY_ID
           public async Task<Reservation> ResByID(string id)
           {

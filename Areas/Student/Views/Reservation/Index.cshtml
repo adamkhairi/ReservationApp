@@ -9,7 +9,7 @@
 
 }
 
-<h1>Index</h1>
+
 
 <div class="row">
     <a class="btn btn-outline-primary mx-auto " asp-action="Create">Create New</a>
@@ -53,16 +53,8 @@
             var status = item.Status;
 
             <tr>
-                @* <td>
-                    @if(item.Status == Status.Approved.ToString()){
-                    <a class="btn btn-"></a>
-                    }else if(){
-
-                    }else{
-
-                    }
-                    </td> *@
                 <td>
+
                     @if (status == Status.Approved.ToString())
                     {
                         <p class="text-success text-center m-1 h-2">&#x2714;</p>
@@ -75,6 +67,7 @@
                     {
                         <p class="text-danger text-center m-1 dis h-2">&#x2718;</p>
                     }
+
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Date)

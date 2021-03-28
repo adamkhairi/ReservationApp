@@ -12,6 +12,9 @@ using ReservationApp.Data;
 using ReservationApp.Models;
 using ReservationApp.ViewModels;
 using ReservationApp.Help;
+using Microsoft.Extensions.Logging;
+using SmartBreadcrumbs.Attributes;
+
 namespace ReservationApp.Areas.Student.Controllers
 {
      [Area("Student")]
@@ -26,18 +29,22 @@ namespace ReservationApp.Areas.Student.Controllers
                _userManager = userManager;
           }
 
-
+          [DefaultBreadcrumb("My home")]
           public async Task<IActionResult> Index()
           {
-               var user = await _userManager.GetUserAsync(User);
+               var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+               var student = await _context.GetStudentById(userId);
 
-               var tomorrow = Helpers.CurrentDay().AddDays(1);
-               var UserReservation = await _context.SudentResOfDay(user.Id, tomorrow);
-               var ApprovedReservation = await _context.SudentApprovedRes(user.Id);
+
+
+               //var tomorrow = Helpers.CurrentDay().AddDays(1);
+               var UserReservation = await _context.SudentReservations(student.Id);
+               // var ApprovedReservation = await _context.SudentApprovedRes(student.Id);
+
                return View(UserReservation);
           }
 
-
+          [Breadcrumb("ViewData.Title")]
           public async Task<IActionResult> Details(string id)
           {
                if (id == null)
@@ -59,6 +66,7 @@ namespace ReservationApp.Areas.Student.Controllers
           [HttpGet]
           public IActionResult Create()
           {
+
                var reservationType = _context.ReservationTypes.Select(t => new SelectListItem
                {
                     Value = t.Id,
@@ -79,21 +87,41 @@ namespace ReservationApp.Areas.Student.Controllers
                {
 
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var student = await _context.Students.FirstOrDefaultAsync(s => s.Id == userId);
+
+                    //Get Tomorow DateTime
+                    var tomorrow = Helpers.CurrentDay().AddDays(1);
+
+                    //Reservation of Tomorrow
+                    var UserReservationTomorrow = await _context.SudentResOfDay(student.Id, reservation.Date);
+                    //Re
+                    var UserReservationOfDate = await _context.SudentResOfCreateDate(student.Id, reservation.CreateDate);
+
+                    var countDate = UserReservationTomorrow.Count();
+                    var countCreateDate = UserReservationOfDate.Count();
 
                     var type = await _context.GetReservationTypeById(reservation.ReservationTypeId);
-
-                    Reservation res = new Reservation
+                    if (countDate <= 0 && countCreateDate <= 2)
                     {
-                         Date = reservation.Date,
-                         Status = reservation.Status,
-                         Cause = reservation.Cause,
-                         StudentId = userId,
-                         ReservationTypeId = type.Id,
-                    };
+                         Reservation res = new Reservation
+                         {
+                              Date = reservation.Date,
+                              Status = reservation.Status,
+                              Cause = reservation.Cause,
+                              StudentId = userId,
+                              ReservationTypeId = type.Id,
+                         };
 
-                    _context.Add(res);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                         _context.Add(res);
+                         await _context.SaveChangesAsync();
+                         return RedirectToAction(nameof(Index));
+
+                    }
+                    else
+                    {
+                         return RedirectToAction(nameof(Index));
+
+                    }
                }
 
                return View(reservation);

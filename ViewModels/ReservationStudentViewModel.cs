@@ -19,7 +19,7 @@ namespace ReservationApp.ViewModels
           public string Id { get; set; }
           [DisplayName("Student")]
           public string StudentId { get; set; }
-          public IdentityUser Student { get; set; }
+          public Student Student { get; set; }
           //public string LastName { get; set; }
 
           //TODO: Fix This

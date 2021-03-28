@@ -10,145 +10,112 @@ using ReservationApp.Models;
 
 namespace ReservationApp.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class ReservationTypesController : Controller
-    {
-        private readonly ApplicationDbContext _context;
+     [Area("Admin")]
+     public class ReservationTypesController : Controller
+     {
+          private readonly ApplicationDbContext _context;
 
-        public ReservationTypesController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+          public ReservationTypesController(ApplicationDbContext context)
+          {
+               _context = context;
+          }
 
-        // GET: Admin/ReservationTypes
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.ReservationTypes.ToListAsync());
-        }
 
-        // GET: Admin/ReservationTypes/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+          public async Task<IActionResult> Index()
+          {
+               return View(await _context.ReservationTypes.ToListAsync());
+          }
 
-            var reservationType = await _context.ReservationTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reservationType == null)
-            {
-                return NotFound();
-            }
 
-            return View(reservationType);
-        }
+          public async Task<IActionResult> Details(string id)
+          {
+               if (id == null)
+               {
+                    return NotFound();
+               }
 
-        // GET: Admin/ReservationTypes/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+               var reservationType = await _context.ReservationTypes
+                   .FirstOrDefaultAsync(m => m.Id == id);
+               if (reservationType == null)
+               {
+                    return NotFound();
+               }
 
-        // POST: Admin/ReservationTypes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,AccessNumber")] ReservationType reservationType)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(reservationType);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(reservationType);
-        }
+               return View(reservationType);
+          }
 
-        // GET: Admin/ReservationTypes/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var reservationType = await _context.ReservationTypes.FindAsync(id);
-            if (reservationType == null)
-            {
-                return NotFound();
-            }
-            return View(reservationType);
-        }
+          public IActionResult Create()
+          {
+               return View();
+          }
 
-        // POST: Admin/ReservationTypes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,Name,AccessNumber")] ReservationType reservationType)
-        {
-            if (id != reservationType.Id)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(reservationType);
+          [HttpPost]
+          [ValidateAntiForgeryToken]
+          public async Task<IActionResult> Create([Bind("Id,Name,AccessNumber")] ReservationType reservationType)
+          {
+               if (ModelState.IsValid)
+               {
+                    _context.Add(reservationType);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReservationTypeExists(reservationType.Id))
+                    return RedirectToAction(nameof(Index));
+               }
+               return View(reservationType);
+          }
+
+
+          public async Task<IActionResult> Edit(string id)
+          {
+               if (id == null)
+               {
+                    return NotFound();
+               }
+
+               var reservationType = await _context.ReservationTypes.FindAsync(id);
+               if (reservationType == null)
+               {
+                    return NotFound();
+               }
+               return View(reservationType);
+          }
+
+
+          [HttpPost]
+          [ValidateAntiForgeryToken]
+          public async Task<IActionResult> Edit(string id, [Bind("Id,Name,AccessNumber")] ReservationType reservationType)
+          {
+               if (id != reservationType.Id)
+               {
+                    return NotFound();
+               }
+
+               if (ModelState.IsValid)
+               {
+                    try
                     {
-                        return NotFound();
+                         _context.Update(reservationType);
+                         await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                         if (!ReservationTypeExists(reservationType.Id))
+                         {
+                              return NotFound();
+                         }
+                         else
+                         {
+                              throw;
+                         }
                     }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(reservationType);
-        }
+                    return RedirectToAction(nameof(Index));
+               }
+               return View(reservationType);
+          }
 
-        // GET: Admin/ReservationTypes/Delete/5
-        public async Task<IActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var reservationType = await _context.ReservationTypes
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reservationType == null)
-            {
-                return NotFound();
-            }
-
-            return View(reservationType);
-        }
-
-        // POST: Admin/ReservationTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
-        {
-            var reservationType = await _context.ReservationTypes.FindAsync(id);
-            _context.ReservationTypes.Remove(reservationType);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ReservationTypeExists(string id)
-        {
-            return _context.ReservationTypes.Any(e => e.Id == id);
-        }
-    }
+          private bool ReservationTypeExists(string id)
+          {
+               return _context.ReservationTypes.Any(e => e.Id == id);
+          }
+     }
 }

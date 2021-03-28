@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SmartBreadcrumbs.Extensions;
 
 namespace ReservationApp
 {
@@ -37,7 +38,17 @@ namespace ReservationApp
                    .AddRoles<IdentityRole>()
                    .AddEntityFrameworkStores<ApplicationDbContext>();
                services.AddControllersWithViews();
-          }
+            services.AddBreadcrumbs(GetType().Assembly, options =>
+            {
+
+                options.TagName = "nav";
+                options.TagClasses = "";
+                options.OlClasses = "breadcrumb";
+                options.LiClasses = "breadcrumb-item";
+                options.ActiveLiClasses = "breadcrumb-item active";
+                options.SeparatorElement = "<li class=\"separator\">/</li>";
+            });
+        }
 
           public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
           {
@@ -51,6 +62,7 @@ namespace ReservationApp
                     app.UseExceptionHandler("/Home/Error");
                     app.UseHsts();
                }
+               
                app.UseHttpsRedirection();
                app.UseStaticFiles();
 
