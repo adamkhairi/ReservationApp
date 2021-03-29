@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -44,6 +45,8 @@ namespace ReservationApp.Areas.Student.Controllers
                return View(UserReservation);
           }
 
+
+
           [Breadcrumb("ViewData.Title")]
           public async Task<IActionResult> Details(string id)
           {
@@ -64,9 +67,44 @@ namespace ReservationApp.Areas.Student.Controllers
 
 
           [HttpGet]
-          public IActionResult Create()
+          public async Task<IActionResult> Create()
           {
+               IDictionary<string ,int> Data = new Dictionary<string ,int>();
+               IDictionary<string ,int> DataTomorrow = new Dictionary<string ,int>();
+               var todayDate = Helpers.CurrentDay();
+               //Count the number of Approved Reservations of Today
+               var todayRes = await _context.GetApprovedResByDate(todayDate);
+               foreach (var item in todayRes.GroupBy(res=>res.ReservationType)
+                   .Select(group=>new
+               {
+                   Name = group.Key.Name,
+                   Count = group.Count(),
+               })
+                   .OrderBy(g=>g.Name))
+               {
+               // add the type and it's cout to the dictionary
+                    Data.Add(item.Name,item.Count);
+               }
+               
+               
+               
+               //Count the number of Approved Reservations of Tomorrow
 
+               var TomorrowRes = await _context.GetApprovedResByDate(todayDate.AddDays(1));
+
+               foreach (var item in TomorrowRes.GroupBy(res=>res.ReservationType)
+                   .Select(group=>new
+               {
+                   Name = group.Key.Name,
+                   Count = group.Count(),
+               })
+                   .OrderBy(g=>g.Name))
+               {
+               
+                    DataTomorrow.Add(item.Name,item.Count);
+               }
+              
+              //ReservationType To select list
                var reservationType = _context.ReservationTypes.Select(t => new SelectListItem
                {
                     Value = t.Id,
@@ -75,6 +113,12 @@ namespace ReservationApp.Areas.Student.Controllers
 
                ViewBag.StatusList = Helpers.StatusList();
                ViewBag.ResType = reservationType;
+
+               ViewBag.dataToday = Data;
+               ViewBag.dataTomorrow= DataTomorrow;
+               // viewBag.EmptyMorning = ;
+               // viewBag.EmptyEvening = ;
+               // viewBag.EmptyWeekEnd = ;
                return View();
           }
 
@@ -201,9 +245,12 @@ namespace ReservationApp.Areas.Student.Controllers
           {
                var reservation = await _context.ResByID(id);
 
-               _context.Reservations.Remove(reservation);
+               //Can't Delete if Admin Approved Or Rejected
+               if(reservation.Status != Status.Pending.ToString()){
+                    _context.Reservations.Remove(reservation);
+                    await _context.SaveChangesAsync();
+               }
 
-               await _context.SaveChangesAsync();
                return RedirectToAction(nameof(Index));
           }
 

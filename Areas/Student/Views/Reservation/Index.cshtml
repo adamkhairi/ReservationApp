@@ -4,23 +4,23 @@
 
 @inject UserManager<IdentityUser> _userManager
 @{
-    ViewData["Title"] = "Reservation";
+    ViewData["Title"] = "My Reservations";
     var user = await _userManager.GetUserAsync(User);
 
 }
 
 
 
-<div class="row">
-    <a class="btn btn-outline-primary mx-auto " asp-action="Create">Create New</a>
+<div class="row mb-4">
+    <a class="btn btn-outline-primary mx-auto " asp-action="Create">New Reservation</a>
 </div>
 
 
-<p>@user.Id</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
+
+<table class="table table-hover table-bordered m-4 text-center">
+    <thead class="table-light ">
+        <tr class="">
+            <th class=" bg-danger rounded text-light text-hover">
                 Status
             </th>
             <th>

@@ -8,15 +8,38 @@
     ViewData["Title"] = "Create Reservation";
    
 }
+<div class="m-1 mb-5">
 
+    <h4 class="text-center"> Today's Empty Places On Each Type ! </h4>
+    @{
+        @* if(ViewBag.dataToday != null){ *@
+            foreach (var item in ViewBag.dataToday){
+                <p>Type : @item.Key Empty<span class="alert-danger">@item.Value</span></p>
+            }
+        @* }else{
+            <p>Nothing To Show!</p>
+        } *@
+    }
+</div>
+<div class="m-1">
 
-
-<h4>Reservation</h4>
+    <h4 class="text-center"> Tomorrow's Empty Places On Each Type ! </h4>
+    @{
+        @* if(ViewBag.dataTomorrow != null){ *@
+            foreach (var item in ViewBag.dataTomorrow){
+                <p>Type : @item.Key Empty<span class="alert-danger">@item.Value</span></p>
+            }
+        @* }else{
+            <p>Nothing To Show!</p>
+        } *@
+    }
+</div>
+<h4 class="text-center">@ViewData["Title"]</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row d-flex justify-content-center align-items-center">
+    <div class=" m-2">
 
-        <form asp-action="Create" asp-controller="Reservation">
+        <form asp-action="Create" asp-controller="Reservation" class="form-horizontal py-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
@@ -50,7 +73,7 @@
     </div>
 </div>
 
-<div>
+<div class=" mx-auto text-center">
     <a asp-action="Index">Back to List</a>
 </div>
 

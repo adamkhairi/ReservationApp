@@ -9,7 +9,7 @@
 
 @await Html.PartialAsync("_TopMenuPartial")
 
-<h1 class="text-danger text-center">Reservations To Approve <span class="h5 text-muted">( 7-Days )</span></h1>
+
 <div class="d-flex m-1">
     <form asp-action="Index" asp-controller="Reservation" asp-area="Admin">
         <label for="filterDate" class="form-control-label mr-3">Date :</label>
@@ -39,7 +39,7 @@
                 Reservation Type
             </th>
             <th>Actions</th>
-            <th></th>
+           
         </tr>
     </thead>
     <tbody>
@@ -85,30 +85,12 @@
 
 
                 <td>
-                    <div class="d-flex flex-column justify-content-center align-items-center">
-                        <div class="d-flex">
-                            <form asp-area="Admin" class="mx-1" asp-action="Submit" asp-controlle="Reservation">
-                                <input class="form-control d-none" type="text" name="id" value="@item.Id" />
-                                <input class="form-control d-none" type="text" name="status"
-                                    value="@Status.Approved.ToString()" />
-                                <input type="submit"
-                                    class="btn btn-outline-success p-0 px-1 rounded-circle font-weight-bolder"
-                                    value="&#10003;" />
-                            </form>
-
-                            <form asp-area="Admin" class="mx-1" asp-action="Submit" asp-controller="Reservation">
-                                <input type="text" name="id" value="@item.Id" class="d-none" />
-                                <input type="text" name="status" value="@Status.Rejected.ToString()" class="d-none" />
-                                <input type="submit"
-                                    class="btn btn-outline-danger p-0 px-1  rounded-circle font-weight-bolder"
-                                    value="&#10007;" />
-                            </form>
-                        </div>
+                     
                         <div>
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                             <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                         </div>
-                    </div>
+                    
 
                 </td>
             </tr>

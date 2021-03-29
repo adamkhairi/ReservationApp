@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ReservationApp.Data;
+using ReservationApp.Help;
+using System.Collections;
 
 namespace ReservationApp.Controllers
 {
@@ -30,17 +32,13 @@ namespace ReservationApp.Controllers
                _httpContextAccessor = httpContextAccessor;
           }
 
-          public IActionResult Index()
+          public async Task<IActionResult> Index()
           {
-               //var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-               //var userRes = _context.Reservations.Include(r => r.ReservationType == _context.ReservationTypes.Include(
-               //    rT => rT.Id == r.Id
+               var ApprovedReservations = await _context.GetReservationsByStatusDate(Status.Approved.ToString(), Helpers.CurrentDay());
+               ViewBag.todayCount = ApprovedReservations.Count();
+               ViewBag.ApprovedReservations = ApprovedReservations;
 
-               //)).AsAsyncEnumerable();
-
-               //var x =  await _userManager.GetUsersInRoleAsync("Student");
-               //ViewBag.Students = x;
-               return View();
+               return View(ApprovedReservations);
           }
 
           public IActionResult Privacy()

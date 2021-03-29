@@ -29,15 +29,51 @@ namespace ReservationApp.Areas.Admin.Controllers
 
           }
 
-
+          //GET Reservations of tomorrow
           public async Task<IActionResult> Index()
           {
                ViewBag.StatusList = Helpers.StatusList();
-               var list = await _context.GetAllReservations();
+               var list = await _context.GetReservationsToApprove();
                //return AbsenceHistories;
                return View("List", list);
           }
 
+          //GET All Reservations History
+          public async Task<IActionResult> History()
+          {
+               ViewBag.StatusList = Helpers.StatusList();
+               var list = await _context.GetAllReservations();
+               //return AbsenceHistories;
+               return View(list);
+          }
+
+          //GET All Reservations APPROVED RESERVATIONS BY DATE
+          public async Task<IActionResult> History(DateTime date)
+          {
+               ViewBag.StatusList = Helpers.StatusList();
+               var list = await _context.GetApprovedResByDate(date);
+               //return AbsenceHistories;
+               return View(list);
+          }
+
+
+
+          //Index Filter
+          [HttpPost]
+          public async Task<ActionResult> Index(DateTime filterDate)
+          {
+               if (filterDate.Year == 0001)
+               {
+                    return RedirectToAction(nameof(Index));
+               }
+               else
+               {
+                    ViewBag.StatusList = Helpers.StatusList();
+
+                    var list = await _context.GetReservationsByDate(filterDate);
+                    return View("List", list);
+               }
+          }
 
 
           //TODO: Add View To 
@@ -60,23 +96,6 @@ namespace ReservationApp.Areas.Admin.Controllers
                     return NotFound();
                }
                return View("List", list);
-          }
-
-
-          [HttpPost]
-          public async Task<ActionResult> Index(DateTime filterDate)
-          {
-               if (filterDate.Year == 0001)
-               {
-                    return RedirectToAction(nameof(Index));
-               }
-               else
-               {
-                    ViewBag.StatusList = Helpers.StatusList();
-
-                    var list = await _context.GetReservationsByDate(filterDate);
-                    return View("List", list);
-               }
           }
 
 
@@ -149,39 +168,6 @@ namespace ReservationApp.Areas.Admin.Controllers
                return View(reservation);
           }
 
-
-          [HttpGet]
-          public async Task<IActionResult> Delete(string id)
-          {
-               if (id == null)
-               {
-                    return NotFound();
-               }
-
-               var reservation = await _context.ResByID(id);
-               if (reservation == null)
-               {
-                    return NotFound();
-               }
-
-               return View(reservation);
-          }
-
-
-          [HttpPost, ActionName("Delete")]
-          [ValidateAntiForgeryToken]
-          public async Task<IActionResult> DeleteConfirmed(string id)
-          {
-               var reservation = await _context.ResByID(id);
-
-               _context.Reservations.Remove(reservation);
-
-               await _context.SaveChangesAsync();
-
-               return RedirectToAction(nameof(Index));
-          }
-
-
           [HttpPost]
           public async Task<IActionResult> Submit(string id, string status)
           {
@@ -189,10 +175,10 @@ namespace ReservationApp.Areas.Admin.Controllers
 
                reservation.Status = status;
 
-               _context.Update(reservation);
 
                if (status == Status.Approved.ToString())
                {
+                    _context.Update(reservation);
                     var UId = reservation.Student.Id;
                     var student = await _context.GetStudentById(UId);
 

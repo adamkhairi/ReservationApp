@@ -1,16 +1,98 @@
-﻿@{
+﻿@using System.Collections
+@model List<Reservation>
+@using System.Linq
+@using Microsoft.CodeAnalysis.Differencing
+@using ReservationApp.ViewModels
+@{
     ViewData["Title"] = "Home Page";
+    @* ArrayList viewData = ViewBag.data; *@
+
 }
 
 <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex align-items-center">
     <div class="container position-relative" data-aos="fade-up" data-aos-delay="500">
         <h1>Welcome to Day</h1>
-        <h2>We are team of talented designers making websites with Bootstrap</h2>
-        <a asp-area="Identity" asp-page="/Account/Register" class="btn-get-started scrollto">Get Started</a>
+        <h2>Approved Reservation's Counter : --<span class="font-weight-bold h1 text-warning">
+                @ViewBag.todayCount</span> --</h2>
+        <a asp-area="Student" asp-controller="Reservation" asp-action="Create" class="btn-get-started scrollto">Reserve
+            Now!</a>
     </div>
 </section><!-- End Hero -->
+<section>
+    <div class="container">
+        <h3 class="text-center text-info m-3">
+        </h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Cause
+                    </th>
+                    <th>
+                        Student
+                    </th>
+                    <th>
+                        Reservation Type
+                    </th>
+                    <th>Actions</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                switch (item.Status)
+                                {
+                                    case "Approved":
+                                        <button class="border-0 rounded-circle bg-success">
+                                            <i class="text-light font-weight-bold icofont-check-circled"></i>
+                                        </button>
+                                        break;
+                                    case "Rejected":
+                                        <button class="border-0 rounded-circle bg-danger">
+                                            <i class="text-light font-weight-bold icofont-close-circled"></i>
+                                        </button>
+                                        break;
+                                    default:
+                                        <button class="border-0 rounded-circle bg-primary">
+                                            <i class="text-light font-weight-bold icofont-refresh"></i>
+                                        </button>
+                                        break;
 
+                                }
+                            }
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cause)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Student.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReservationType.Name)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</section>
 <!-- ======= About Section ======= -->
 <section id="about" class="about">
     <div class="container">
@@ -20,6 +102,8 @@
                 <img src="assets/img/about.jpg" class="img-fluid" alt="">
             </div>
             <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content" data-aos="fade-right">
+
+
                 <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
                 <p class="font-italic">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
