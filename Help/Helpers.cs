@@ -55,6 +55,7 @@ namespace ReservationApp.Help
 
           public static DateTime CurrentDay()
           {
+               // var d = DateTime.Now.Date.AddDays(1);
                var dateNow = DateTime.UtcNow;
                return dateNow.ToLocalTime().Date;
           }

@@ -99,7 +99,10 @@ namespace ReservationApp.Areas.Identity.Pages.Account
                if (ModelState.IsValid)
                {
                     var user = new Models.Student { UserName = Input.Username, Email = Input.Email, FullName = Input.FullName, Class = Input.Class, PhoneNumber = Input.PhoneNumber };
+
+                    
                     var result = await _userManager.CreateAsync(user, Input.Password);
+                    
                     if (result.Succeeded)
                     {
 

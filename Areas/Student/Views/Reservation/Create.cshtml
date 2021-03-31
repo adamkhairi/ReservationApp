@@ -6,75 +6,92 @@
 
 @{
     ViewData["Title"] = "Create Reservation";
-   
+
 }
-<div class="m-1 mb-5">
+<div class="container d-flex">
+    <div class="m-1 mb-5 col-6 d-flex flex-column justify-content-center align-items-center">
+        <h4 class="text-center"> Today's Empty Places On Each Type ! </h4>
 
-    <h4 class="text-center"> Today's Empty Places On Each Type ! </h4>
-    @{
-        @* if(ViewBag.dataToday != null){ *@
-            foreach (var item in ViewBag.dataToday){
-                <p>Type : @item.Key Empty<span class="alert-danger">@item.Value</span></p>
+        <hr class="hr">
+        @{
+            @* if(ViewBag.dataToday != null){ *@
+            foreach (var item in ViewBag.dataToday)
+            {
+                <p class="btn-warning rounded-pill px-4 py-2">
+                    Type : @item.Key <br>Count Places :
+                    <span class="btn btn-danger text-light font-weight-bold py-1 px-2 rounded-pill"> @item.Value </span>
+                </p>
+                <hr>
+
             }
-        @* }else{
-            <p>Nothing To Show!</p>
-        } *@
-    }
-</div>
-<div class="m-1">
+            @* }else{
+                    <p>Nothing To Show!</p>
+                } *@
+        }
+    </div>
+    <hr class="hr separator">
+    <div class="m-1 mb-5 col-6 d-flex flex-column justify-content-center align-items-center">
 
-    <h4 class="text-center"> Tomorrow's Empty Places On Each Type ! </h4>
-    @{
-        @* if(ViewBag.dataTomorrow != null){ *@
-            foreach (var item in ViewBag.dataTomorrow){
-                <p>Type : @item.Key Empty<span class="alert-danger">@item.Value</span></p>
+
+        <h4 class="text-center"> Tomorrow's Empty Places On Each Type ! </h4>
+        <hr class="hr">
+
+        @{
+            @* if(ViewBag.dataTomorrow != null){ *@
+            foreach (var item in ViewBag.dataTomorrow)
+            {
+                <p class="btn-warning rounded-pill px-4 py-2">
+                    Type : @item.Key <br>Count Places :
+                    <span class="btn btn-danger text-light font-weight-bold py-1 px-2 rounded-pill"> @item.Value </span>
+                </p>
+                <hr>
             }
-        @* }else{
-            <p>Nothing To Show!</p>
-        } *@
-    }
+            @* }else{
+                    <p>Nothing To Show!</p>
+                } *@
+        }
+    </div>
 </div>
-<h4 class="text-center">@ViewData["Title"]</h4>
-<hr />
-<div class="row d-flex justify-content-center align-items-center">
-    <div class=" m-2">
+<div class=" m-3 row d-flex justify-content-center align-items-center">
+    <div class=" col-6 mx-auto card p-4">
+        <h3 class="text-center font-weight-bold">@ViewData["Title"]</h3>
 
-        <form asp-action="Create" asp-controller="Reservation" class="form-horizontal py-4">
+        <form asp-action="Create" asp-controller="Reservation" class="py-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
+                <label asp-for="Date" class="text-center"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group d-none">
-                <label asp-for="Status" class="control-label"></label>
-                <Select class="form-control custom-select" asp-items="@ViewBag.StatusList">
+                <label asp-for="Status" class=""></label>
+                <Select class="form-control custom-select text-center" asp-items="@ViewBag.StatusList">
                     <option Disable selected></option>
                 </Select>
                 @* @Html.DropDownList("Status",ViewBag.StatusList as SelectList)  *@
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Cause" class="control-label"></label>
+                <label asp-for="Cause" class=""></label>
                 <input asp-for="Cause" class="form-control" />
                 <span asp-validation-for="Cause" class="text-danger"></span>
             </div>
-           <div class="form-group">
-                <label asp-for="ReservationTypeId" class="control-label">Type</label>
-                <select asp-for="ReservationTypeId" asp-items="@ViewBag.ResType" class="form-control custom-select">
+            <div class="form-group">
+                <label asp-for="ReservationTypeId" class="">Type</label>
+                <select asp-for="ReservationTypeId" asp-items="@ViewBag.ResType" class="form-control custom-select text-center">
                     <option disabled selected>- Reservation Type -</option>
                 </select>
                 <span asp-validation-for="ReservationTypeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="mx-auto text-center">
+                <input type="submit" value="Create" class="btn mx-auto btn-success rounded-pill mt-4" />
             </div>
         </form>
     </div>
 </div>
 
-<div class=" mx-auto text-center">
-    <a asp-action="Index">Back to List</a>
+<div class="text-center">
+    <a asp-action="Index" class="btn btn-outline-info rounded-pill">Go Back</a>
 </div>
 
 @section Scripts {

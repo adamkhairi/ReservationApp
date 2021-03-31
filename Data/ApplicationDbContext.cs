@@ -45,11 +45,11 @@ namespace ReservationApp.Data
           // GET_RESERVATIONS_To_Approve
           public async Task<List<Reservation>> GetReservationsToApprove()
           {
-                    //Get Next week Reservations List
+               //Get Next week Reservations List
                var reservationData = await Reservations
                     .Include(x => x.ReservationType)
                     .Include(s => s.Student)
-                    .Where(r => r.Date >= Helpers.CurrentDay() &&r.Date <= Helpers.CurrentDay().AddDays(7))
+                    .Where(r => r.Date >= Helpers.CurrentDay() && r.Date <= Helpers.CurrentDay().AddDays(7))
                     .Where(r => r.Status == Status.Pending.ToString())
                     .OrderByDescending(r => r.Date)
                     .ToListAsync();
@@ -234,12 +234,12 @@ namespace ReservationApp.Data
           //GET LIST OF APPROVED RESERVATIONS BY DATE
           public async Task<List<Reservation>> GetApprovedResByDate(DateTime Date)
           {
-               
+
                var list = await Reservations
-                              .Include(r=>r.Student)
-                              .Include(r=>r.ReservationType)
-                              .Where(r=>r.Date == Date)
-                              .Where(r=>r.Status == Status.Approved.ToString())
+                              .Include(r => r.Student)
+                              .Include(r => r.ReservationType)
+                              .Where(r => r.Date == Date)
+                              .Where(r => r.Status == Status.Approved.ToString())
                               .ToListAsync();
                return list;
           }
@@ -247,12 +247,12 @@ namespace ReservationApp.Data
           //GET LIST OF Rejected RESERVATIONS BY DATE
           public async Task<List<Reservation>> GetRejectedResByDate(DateTime Date)
           {
-               
+
                var list = await Reservations
-                              .Include(r=>r.Student)
-                              .Include(r=>r.ReservationType)
-                              .Where(r=>r.Date == Date)
-                              .Where(r=>r.Status == Status.Rejected.ToString())
+                              .Include(r => r.Student)
+                              .Include(r => r.ReservationType)
+                              .Where(r => r.Date == Date)
+                              .Where(r => r.Status == Status.Rejected.ToString())
                               .ToListAsync();
                return list;
           }
@@ -261,12 +261,12 @@ namespace ReservationApp.Data
           //GET LIST OF This Week RESERVATIONS 
           public async Task<List<Reservation>> GetResOfThisWeek(DateTime Date)
           {
-               
+
                var list = await Reservations
-                              .Include(r=>r.Student)
-                              .Include(r=>r.ReservationType)
-                              .Where(r=>r.Date.DayOfWeek == DayOfWeek.Saturday && r.Date.DayOfWeek == DayOfWeek.Sunday)
-                              .Where(r=>r.Status == Status.Rejected.ToString())
+                              .Include(r => r.Student)
+                              .Include(r => r.ReservationType)
+                              .Where(r => r.Date.DayOfWeek == DayOfWeek.Saturday && r.Date.DayOfWeek == DayOfWeek.Sunday)
+                              .Where(r => r.Status == Status.Rejected.ToString())
                               .ToListAsync();
                return list;
           }
