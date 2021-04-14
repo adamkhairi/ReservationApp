@@ -11,7 +11,6 @@ namespace ReservationApp.Models
      {
           public string FullName { get; set; }
           public string Class { get; set; }
-
           [DefaultValue(0)] public int ReservationCount { get; set; } = 0;
 
      }

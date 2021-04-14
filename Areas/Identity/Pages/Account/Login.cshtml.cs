@@ -48,7 +48,7 @@ namespace ReservationApp.Areas.Identity.Pages.Account
           public class InputModel
           {
                [Required]
-               [Display(Name = "Username/Email")]
+               [Display(Name = "Username or Email")]
                public string Email { get; set; }
 
                [Required]

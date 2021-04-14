@@ -39,22 +39,31 @@ namespace ReservationApp
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
-            services.AddBreadcrumbs(GetType().Assembly, options =>
-            {
-
-                options.TagName = "nav";
-                options.TagClasses = "";
-                options.OlClasses = "breadcrumb";
-                options.LiClasses = "breadcrumb-item";
-                options.ActiveLiClasses = "breadcrumb-item active";
-                options.SeparatorElement = "<li class=\"separator\">/</li>";
-            });
+            // services.AddBreadcrumbs(GetType().Assembly, options =>
+            // {
+            //     options.TagName = "nav";
+            //     options.TagClasses = "";
+            //     options.OlClasses = "breadcrumb";
+            //     options.LiClasses = "breadcrumb-item";
+            //     options.ActiveLiClasses = "breadcrumb-item active";
+            //     options.SeparatorElement = "<li class=\"separator\">/</li>";
+            // });
 
             services.AddMvc().AddNToastNotifyToastr(new ToastrOptions
             {
                 ProgressBar = true,
                 TitleClass = "text-dark"
 
+            });
+
+            services.AddAuthentication()
+            .AddGoogle(options =>
+            {
+                IConfigurationSection googleAuthNSection =
+                    Configuration.GetSection("Authentication:Google");
+
+                options.ClientId = googleAuthNSection["ClientId"];
+                options.ClientSecret = googleAuthNSection["ClientSecret"];
             });
             //services.AddMvc().AddNToastNotifyNoty(new NotyOptions
             //{
